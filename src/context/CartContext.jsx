@@ -115,34 +115,37 @@ export const CartProvider = ({ children }) => {
 
     // Función para decrementar cantidad en el carrito
     const decrementarCantidadEnCarrito = (productId) => {
-        setCart(cart.map((item) => {
-            if (item.id === productId) {
-                if (item.cantidad > 1) {
-                    return { ...item, cantidad: item.cantidad - 1 };
-                } else {
-                    return null; // Si la cantidad es 1, marcamos para eliminar
-                }
-            } else {
-                return item;
+        console.log('Decrementando producto:', productId, 'tipo:', typeof productId);
+        
+        setCart(prevCart => {
+            // Encontrar el índice del producto
+            const productIndex = prevCart.findIndex(item => item.id === productId || item.id == productId);
+            
+            if (productIndex === -1) {
+                console.log('Producto no encontrado en el carrito');
+                return prevCart;
             }
-        }).filter(item => item !== null)); // Quitamos los productos nulos
+            
+            const product = prevCart[productIndex];
+            console.log('Producto encontrado:', product);
+            
+            if (product.cantidad <= 1) {
+                // Si la cantidad es 1 o menos, eliminar el producto
+                console.log('Eliminando producto del carrito');
+                return prevCart.filter((_, index) => index !== productIndex);
+            } else {
+                // Reducir la cantidad en 1
+                console.log('Reduciendo cantidad de', product.cantidad, 'a', product.cantidad - 1);
+                const newCart = [...prevCart];
+                newCart[productIndex] = { ...product, cantidad: product.cantidad - 1 };
+                return newCart;
+            }
+        });
     };
 
     const handleDeleteFromCart = (product) => {
         toast.error(`El producto ${product.nombre} se ha eliminado del carrito`)
-        setCart(prevCart => {
-            return prevCart.map(item => {
-                if (item.id === product.id) {
-                    if (item.cantidad > 1) {
-                        return { ...item, cantidad: item.cantidad - 1 };
-                    } else {
-                        return null; // Si la cantidad es 1, marcamos para eliminar
-                    }
-                } else {
-                    return item; // Si no es el producto, lo dejamos igual
-                }
-            }).filter(item => item !== null); // Quitamos los productos nulos
-        });
+        setCart(prevCart => prevCart.filter(item => item.id !== product.id));
     };
 
     return (

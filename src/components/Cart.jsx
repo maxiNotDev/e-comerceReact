@@ -85,7 +85,10 @@ const Cart = ({ isOpen, onClose }) => {
                                                                 <div className="flex flex-1 items-end justify-between text-sm">
                                                                     <div className="flex items-center gap-2">
                                                                         <button
-                                                                            onClick={() => decrementarCantidadEnCarrito(item.id)}
+                                                                            onClick={() => {
+                                                                                console.log('Botón - presionado para producto:', item.id);
+                                                                                decrementarCantidadEnCarrito(item.id);
+                                                                            }}
                                                                             className="flex items-center justify-center w-6 h-6 rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
                                                                         >
                                                                             <FaMinus className="text-xs" />

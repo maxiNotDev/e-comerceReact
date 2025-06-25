@@ -6,20 +6,21 @@ import { CartContext } from '../context/CartContext'
 import { FaTrash, FaArrowLeft, FaShoppingBag, FaMinus, FaPlus } from 'react-icons/fa'
 
 const Carrito = () => {
-  const { cart, handleDeleteFromCart, handleAddToCart } = useContext(CartContext)
+  const { 
+    cart, 
+    handleDeleteFromCart, 
+    incrementarCantidadEnCarrito,
+    decrementarCantidadEnCarrito
+  } = useContext(CartContext)
 
   const total = cart.reduce((sum, item) => sum + (item.precio * item.cantidad), 0)
 
   const incrementarCantidad = (item) => {
-    handleAddToCart({...item, cantidad: item.cantidad + 1})
+    incrementarCantidadEnCarrito(item.id)
   }
 
   const decrementarCantidad = (item) => {
-    if (item.cantidad > 1) {
-      handleAddToCart({...item, cantidad: item.cantidad - 1})
-    } else {
-      handleDeleteFromCart(item)
-    }
+    decrementarCantidadEnCarrito(item.id)
   }
 
   return (
